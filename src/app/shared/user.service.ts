@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Response } from '@angular/http';
 import { User } from './user.model';
 
@@ -12,7 +12,6 @@ export class UserService {
   constructor(private http : HttpClient) { }
 
   registerUser(user : User){
-    console.log("In angular service -> registerUser")
     const body : User = {
       UserName : user.UserName,
       Password : user.Password,
@@ -20,9 +19,14 @@ export class UserService {
       FirstName : user.FirstName,
       LastName : user.LastName
     }
-    console.log(body);
-    console.log(this.rootUrl + '/api/registerUser');
     return this.http.post(this.rootUrl + '/api/registerUser', body);
+  }
+  userAuthentication(userName, password){
+    // request web api for token
+    var data = "username="+userName+"&password="+password+"&grant_type=password";
+    var requestHeader = new HttpHeaders({'Content-Type' : 'application/x-www-urlencoded'});
+    return this.http.post(this.rootUrl + '/token', data, {headers:requestHeader});
+
   }
 
 }

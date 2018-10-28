@@ -14,17 +14,18 @@ export class SignInComponent implements OnInit {
 
   ngOnInit() {
   }
-
   OnSubmit(userName, password){
     // request web api for token.
     this.userService.userAuthentication(userName,password).subscribe((data : any)=>{
-      localStorage.setItem('userToken', data.access_token);
-      this.router.navigate(['/home']); //load home
-      // success
+      //localStorage.setItem('userToken', data.access_token);
+      debugger;
+      if(data.length != 0 && data[0].UserName == userName && data[0].Password == password){
+        this.router.navigate(['/home']); //load home
+      }else{
+        this.isLoginError = true;
+      }
     }, (err : HttpErrorResponse)=>{
       this.isLoginError = true;
     });
   }
-
-
 }
